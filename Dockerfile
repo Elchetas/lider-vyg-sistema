@@ -16,10 +16,18 @@ RUN composer create-project laravel/laravel .
 # Copiar tu sistema encima
 COPY . .
 
+# Permisos
 RUN chown -R www-data:www-data storage bootstrap/cache
 
+# Variables necesarias
+ENV APP_ENV=production
+ENV APP_DEBUG=false
+
+# Apache apunta a public
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf
 
-EXPOSE 80
-CMD ["apache2-foreground"]
+# Ejecutar TODO automáticamente al iniciar
+CMD php artisan key:generate \
+ && php artisan migrate --force --seed \
+ && apache2-foreground
