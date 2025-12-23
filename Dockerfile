@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 RUN a2enmod rewrite
 
 # 👉 DOCUMENT ROOT CORRECTO (Laravel)
-ENV APACHE_DOCUMENT_ROOT /var/www/html/overlay/public
+ENV APACHE_DOCUMENT_ROOT /var/www/html/overlay/public/vendor/lidervyg
 
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
     /etc/apache2/sites-available/*.conf \
