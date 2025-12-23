@@ -28,9 +28,10 @@ RUN mkdir -p /var/www/html/overlay/storage \
 # Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Instalar dependencias
-WORKDIR /var/www/html/overlay
+# Instalar dependencias (composer.json está en la raíz)
+WORKDIR /var/www/html
 RUN composer install --no-dev --optimize-autoloader
+
 
 EXPOSE 80
 
