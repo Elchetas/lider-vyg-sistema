@@ -7,9 +7,12 @@ use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\GuiaController;
 use App\Http\Controllers\SunatReportController;
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
-    return redirect()->route('dashboard');
+    return redirect('/login');
 });
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
