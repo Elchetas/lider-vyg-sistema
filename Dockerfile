@@ -29,5 +29,6 @@ RUN sed -ri 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-availabl
 
 # Ejecutar TODO automáticamente al iniciar
 CMD php artisan key:generate \
- && php artisan migrate --force --seed \
+ && php artisan migrate --force \
  && apache2-foreground
+
