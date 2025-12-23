@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 RUN a2enmod rewrite
 
 # 👉 DOCUMENT ROOT CORRECTO (Laravel)
-ENV APACHE_DOCUMENT_ROOT /var/www/html/overlay/public/vendor/lidervyg
+ENV APACHE_DOCUMENT_ROOT /var/www/html/overlay/public
 
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
     /etc/apache2/sites-available/*.conf \
@@ -29,9 +29,8 @@ RUN mkdir -p /var/www/html/overlay/storage \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Instalar dependencias (composer.json está en la raíz)
-WORKDIR /var/www/html
-RUN composer install --no-dev --optimize-autoloader
-
+WORKDIR /var/www/html/overlay
+RUN composer install
 
 EXPOSE 80
 
