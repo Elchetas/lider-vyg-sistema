@@ -27,7 +27,11 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 RUN composer install --no-dev --optimize-autoloader
 
-# Permisos
+# Crear carpetas necesarias de Laravel
+RUN mkdir -p /var/www/html/storage \
+    /var/www/html/bootstrap/cache
+
+# Permisos correctos
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
