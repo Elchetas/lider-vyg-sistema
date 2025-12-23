@@ -19,6 +19,11 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
 # Copiar proyecto
 COPY . /var/www/html
 
+# Ejecutar composer en la raíz
+WORKDIR /var/www/html
+RUN composer install --no-dev --optimize-autoloader
+
+
 # Crear carpetas necesarias y permisos
 RUN mkdir -p /var/www/html/overlay/storage \
     /var/www/html/overlay/bootstrap/cache \
