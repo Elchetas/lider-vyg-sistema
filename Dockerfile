@@ -1,34 +1,35 @@
 FROM php:8.2-apache
 
-# Dependencias del sistema
+# Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
     libpq-dev \
+    unzip \
+    git \
     && docker-php-ext-install pdo pdo_pgsql
 
-# Habilitar mod_rewrite
+# Habilitar rewrite
 RUN a2enmod rewrite
 
-# Apache debe apuntar a public/
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+# DocumentRoot correcto para Laravel
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
     /etc/apache2/sites-available/*.conf \
     /etc/apache2/apache2.conf
 
-# Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
 # Copiar proyecto
 COPY . /var/www/html
 
-# Permisos Laravel
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Instalar Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Instalar dependencias
+# Instalar dependencias Laravel
 WORKDIR /var/www/html
 RUN composer install --no-dev --optimize-autoloader
+
+# Permisos
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 EXPOSE 80
 
