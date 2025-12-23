@@ -20,9 +20,13 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
 # Copiar proyecto
 COPY . /var/www/html
 
-# Permisos
+# Crear carpetas necesarias para Laravel
+RUN mkdir -p /var/www/html/storage \
+    /var/www/html/bootstrap/cache
+
+# Permisos correctos
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
